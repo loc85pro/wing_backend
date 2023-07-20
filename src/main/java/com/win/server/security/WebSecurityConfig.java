@@ -26,7 +26,7 @@ public class WebSecurityConfig  {
     private AuthService authService;
     @Bean
     public SecurityFilterChain configFilterChain(HttpSecurity http) throws Exception{
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider,customUserDetailService,authService), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider,customUserDetailService,authService), BasicAuthenticationFilter.class).addFilterBefore(new CorsFilter(), BasicAuthenticationFilter.class);
         return http.build();
     }
     @Bean
