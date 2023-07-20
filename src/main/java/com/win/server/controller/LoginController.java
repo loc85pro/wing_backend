@@ -1,10 +1,11 @@
 package com.win.server.controller;
 
-import com.win.server.model.*;
+import com.win.server.DTO.ErrorResponse;
+import com.win.server.DTO.LoginRequestModel;
+import com.win.server.DTO.TokenResponse;
 import com.win.server.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.antlr.v4.runtime.Token;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class LoginController {
     @PostMapping("/basic")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public TokenResponse basicLogin(@RequestBody LoginRequestModel data) {
-             return authService.usernamePasswordLogin(data.getUsername(), data.getPassword());
+             return authService.emailPasswordLogin(data.getUsername(), data.getPassword());
     }
 
     @GetMapping("/oauth2/google/authorization")
@@ -32,6 +33,6 @@ public class LoginController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void getCodeGoogle(@RequestParam String code, HttpServletResponse response) throws IOException {
         TokenResponse token = authService.oauth2GoogleLogin(code);
-        response.sendRedirect("http://localhost:5173/catch_token?accessToken="+token.getAccessToken()+"?refreshToken="+token.getRefreshToken());
+        response.sendRedirect("http://localhost:5173/catch_token?accessToken="+token.getAccessToken()+"&refreshToken="+token.getRefreshToken());
     }
 }

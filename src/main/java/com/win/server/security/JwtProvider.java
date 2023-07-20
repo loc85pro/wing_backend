@@ -16,11 +16,12 @@ public class JwtProvider {
 
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
         return claims.getSubject();
     }
+
 }

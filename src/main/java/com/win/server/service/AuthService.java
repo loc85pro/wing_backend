@@ -5,10 +5,10 @@ import com.win.server.entity.GoogleEntity;
 import com.win.server.entity.UserEntity;
 import com.win.server.exception.myexception.IncorrectPasswordException;
 import com.win.server.exception.myexception.UserNotFoundException;
-import com.win.server.model.OAuthTokenRequest;
-import com.win.server.model.OAuthTokenResponse;
-import com.win.server.model.OAuthUserInfo;
-import com.win.server.model.TokenResponse;
+import com.win.server.DTO.OAuthTokenRequest;
+import com.win.server.DTO.OAuthTokenResponse;
+import com.win.server.DTO.OAuthUserInfo;
+import com.win.server.DTO.TokenResponse;
 import com.win.server.repository.GoogleRepository;
 import com.win.server.repository.UserRepository;
 import com.win.server.security.AdminAuthority;
@@ -42,7 +42,8 @@ public class AuthService {
 
 
     public TokenResponse usernamePasswordLogin(String username, String password) {
-        UserDetails userDetails = userDetailService.loadUserByUsername(username);
+        UserEntity user = userRepository.getByUsername(username);
+        UserDetails userDetails = userDetailService.loadUserByUsername(user.getId());
         if (userDetails == null)
             throw new UserNotFoundException(username);
         if (!userDetails.getPassword().equals(password))
@@ -53,10 +54,23 @@ public class AuthService {
         return new TokenResponse(accessToken, refreshToken);
     }
 
+    public TokenResponse emailPasswordLogin(String email, String password) {
+        UserEntity user = userRepository.getByEmail(email);
+        UserDetails userDetails = userDetailService.loadUserByUsername(user.getId());
+        if (userDetails == null)
+            throw new UserNotFoundException("email: "+email);
+        if (!userDetails.getPassword().equals(password))
+            throw new IncorrectPasswordException();
+        setUserContext(userDetails);
+        String accessToken = jwtProvider.generateToken(userDetails.getUsername(), 120000L); //2 minutes
+        String refreshToken = jwtProvider.generateToken(userDetails.getUsername(), 1800000L); //30 minutes
+        return new TokenResponse(accessToken, refreshToken);
+    }
+
 
     public TokenResponse registerUser(UserEntity userEntity) {
         userRepository.create(userEntity);
-        setUserContext(userDetailService.loadUserByUsername(userEntity.getUsername()));
+        setUserContext(userDetailService.loadUserByUsername(userEntity.getId()));
         return generateTokenResponse(userEntity.getId());
     }
 

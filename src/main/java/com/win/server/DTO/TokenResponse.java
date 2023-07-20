@@ -1,4 +1,4 @@
-package com.win.server.model;
+package com.win.server.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
