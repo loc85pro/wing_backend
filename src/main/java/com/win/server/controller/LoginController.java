@@ -23,8 +23,9 @@ public class LoginController {
 
     @GetMapping("/oauth2/google/authorization")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String getAuthorizationURLGoogle() {
-        return "https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Flogin%2Foauth2%2Fgoogle&prompt=consent&response_type=code&client_id=286076435907-6nfi8v3sd5gchj8rp091gncul553um6f.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile&access_type=offline";
+    public ErrorResponse getAuthorizationURLGoogle() {
+
+        return new ErrorResponse("https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Flogin%2Foauth2%2Fgoogle&prompt=consent&response_type=code&client_id=286076435907-6nfi8v3sd5gchj8rp091gncul553um6f.apps.googleusercontent.com&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile&access_type=offline",200);
     }
 
     @GetMapping("/oauth2/google")
