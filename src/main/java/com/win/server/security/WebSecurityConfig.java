@@ -3,7 +3,6 @@ package com.win.server.security;
 import com.win.server.service.AuthService;
 import jakarta.servlet.FilterChain;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +16,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 
 @Configuration
 @AllArgsConstructor
@@ -26,7 +26,8 @@ public class WebSecurityConfig  {
     private AuthService authService;
     @Bean
     public SecurityFilterChain configFilterChain(HttpSecurity http) throws Exception{
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider,customUserDetailService,authService), BasicAuthenticationFilter.class).addFilterBefore(new CorsFilter(), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider,customUserDetailService,authService), BasicAuthenticationFilter.class);
+        http.addFilterBefore(new CorsFilter(), CsrfFilter.class);
         return http.build();
     }
     @Bean

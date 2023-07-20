@@ -26,9 +26,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        System.out.println("This is JWT");
         String token = getTokenFromRequest(request);
         String userId = jwtProvider.getUserIdFromToken(token);
-        System.out.println("User ID: "+userId);
         UserDetails userDetail = userDetailService.loadUserByUsername(userId);
         authService.setUserContext(userDetail);
         filterChain.doFilter(request,response);
@@ -42,8 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         throw new TokenNotFoundException("");
     }
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        System.out.println("not filter JWT");
         String requestPath = request.getServletPath();
-        String[] whiteList = {"/login/basic","/register/basic"};
+        System.out.println("Hello: " + requestPath);
+        String[] whiteList = {"/login/basic","/register/basic",};
         for (String path : whiteList) {
             if (path.equals(requestPath))
                 return true;

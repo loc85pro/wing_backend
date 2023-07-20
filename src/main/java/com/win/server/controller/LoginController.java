@@ -19,6 +19,7 @@ public class LoginController {
     @PostMapping("/basic")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public TokenResponse basicLogin(@RequestBody LoginRequestModel data) {
+        System.out.println("Vo r ne");
              return authService.emailPasswordLogin(data.getUsername(), data.getPassword());
     }
 
