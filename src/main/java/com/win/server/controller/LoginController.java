@@ -4,6 +4,7 @@ import com.win.server.model.*;
 import com.win.server.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.antlr.v4.runtime.Token;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,8 @@ public class LoginController {
 
     @GetMapping("/oauth2/google")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public TokenResponse getCodeGoogle(@RequestParam String code, HttpServletResponse response) throws IOException {
-        return authService.oauth2GoogleLogin(code);
+    public void getCodeGoogle(@RequestParam String code, HttpServletResponse response) throws IOException {
+        TokenResponse token = authService.oauth2GoogleLogin(code);
+        response.sendRedirect("http://localhost:5173/catch_token?accessToken="+token.getAccessToken()+"?refreshToken="+token.getRefreshToken());
     }
 }
