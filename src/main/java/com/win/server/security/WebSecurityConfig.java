@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,19 +21,14 @@ import org.springframework.security.web.csrf.CsrfFilter;
 
 @Configuration
 @AllArgsConstructor
+@EnableWebSecurity
 public class WebSecurityConfig  {
     private JwtProvider jwtProvider;
     private CustomUserDetailService customUserDetailService;
     private AuthService authService;
     @Bean
-    public SecurityFilterChain configFilterChain(HttpSecurity http) throws Exception{
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtProvider,customUserDetailService,authService), BasicAuthenticationFilter.class);
-        http.addFilterBefore(new CorsFilter(), CsrfFilter.class);
-        return http.build();
-    }
-    @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return  (web) -> web.ignoring().requestMatchers("/login/*","/register/*");
+        return  (web) -> web.ignoring().requestMatchers("/login/*","/register/*","/user/me","*");
     }
 
 }
