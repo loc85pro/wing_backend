@@ -2,12 +2,11 @@ package com.win.server.DTO;
 
 import com.win.server.entity.UserEntity;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 public class UserDTO {
     private String id;
     private String user_name;

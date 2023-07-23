@@ -1,37 +1,20 @@
 package com.win.server.repository;
 
 import com.win.server.entity.UserEntity;
-import com.win.server.exception.myexception.UserNotFoundException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public class UserRepository {
-    @PersistenceContext
-    private EntityManager entityManager;
-    public UserEntity getById(String id) {
-        return (UserEntity) entityManager.createQuery("FROM UserEntity user WHERE user.id=:id").setParameter("id",id).getSingleResult();
-    }
+public interface UserRepository extends JpaRepository<UserEntity,String> {
+    public UserEntity findByEmail(String email);
 
-    public UserEntity getByUsername(String username) {
-        Object rs = entityManager.createQuery("FROM UserEntity user WHERE user.username=:username").setParameter("username",username).getSingleResult();
-        if (rs==null)
-            throw new UserNotFoundException(username);
-        return (UserEntity)rs;
-    }
+    @Query("FROM UserEntity user WHERE user.user_name=:username")
+    public UserEntity findByUser_name(@Param("username") String username);
 
-    public UserEntity getByEmail(String email) {
-        Object rs = entityManager.createQuery("FROM UserEntity user WHERE user.email=:email").setParameter("email",email).getSingleResult();
-        if (rs==null)
-            throw new UserNotFoundException("email: "+email);
-        return (UserEntity)rs;
-    }
-
-    @Transactional
-    public void create(UserEntity userEntity) {
-        entityManager.persist(userEntity);
-    }
+    @Query("FROM UserEntity user WHERE user.id=:id")
+    public UserEntity getById(@Param("id") String id);
 }

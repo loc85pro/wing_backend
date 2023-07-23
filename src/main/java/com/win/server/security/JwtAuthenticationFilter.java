@@ -27,7 +27,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        System.out.println("This is JWT");
         String token = getTokenFromRequest(request);
         String userId = jwtProvider.getUserIdFromToken(token);
         UserDetails userDetail = userDetailService.loadUserByUsername(userId);
@@ -39,7 +38,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         System.out.println("Token from request: "+token);
         if (token != null && token.startsWith("Bearer "))
             return token.replace("Bearer ", "");
-
         throw new TokenNotFoundException("");
     }
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {

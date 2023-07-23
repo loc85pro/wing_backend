@@ -11,10 +11,10 @@ public class UserService {
     private UserRepository userRepository;
 
     public UserDTO getUserById(String id) {
-        return new UserDTO(userRepository.getById(id));
+        return new UserDTO(userRepository.getReferenceById(id));
     }
 
     public UserDTO getUserByUsername(String username) {
-        return new UserDTO(userRepository.getByUsername(username));
+        return new UserDTO(userRepository.findByUser_name(username));
     }
 }

@@ -7,10 +7,6 @@ import lombok.*;
 
 @Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Table(name="google")
 public class GoogleEntity {
     @Id

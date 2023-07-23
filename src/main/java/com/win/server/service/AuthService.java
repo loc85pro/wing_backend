@@ -42,7 +42,7 @@ public class AuthService {
 
 
     public TokenResponse usernamePasswordLogin(String username, String password) {
-        UserEntity user = userRepository.getByUsername(username);
+        UserEntity user = userRepository.findByUser_name(username);
         UserDetails userDetails = userDetailService.loadUserByUsername(user.getId());
         if (userDetails == null)
             throw new UserNotFoundException(username);
@@ -55,7 +55,7 @@ public class AuthService {
     }
 
     public TokenResponse emailPasswordLogin(String email, String password) {
-        UserEntity user = userRepository.getByEmail(email);
+        UserEntity user = userRepository.findByEmail(email);
         UserDetails userDetails = userDetailService.loadUserByUsername(user.getId());
         if (userDetails == null)
             throw new UserNotFoundException("email: "+email);
@@ -69,7 +69,7 @@ public class AuthService {
 
 
     public TokenResponse registerUser(UserEntity userEntity) {
-        userRepository.create(userEntity);
+        userRepository.save(userEntity);
         setUserContext(userDetailService.loadUserByUsername(userEntity.getId()));
         return generateTokenResponse(userEntity.getId());
     }
@@ -148,11 +148,11 @@ public class AuthService {
         ObjectMapper mapperData = new ObjectMapper();
         userInfo = mapperData.readValue(userDataString,OAuthUserInfo.class);
         //--------------------- CASE: Account is exist-----
-        GoogleEntity myGoogleData = googleRepository.findById(userInfo.getId());
+        GoogleEntity myGoogleData = googleRepository.getReferenceById(userInfo.getId());
         if (myGoogleData!=null)
         {
             System.out.println(myGoogleData.getId());
-            UserEntity user = userRepository.getById(myGoogleData.getUser_id());
+            UserEntity user = userRepository.getReferenceById(myGoogleData.getUser_id());
             setUserContext(userDetailService.loadUserByUsername(user.getUsername()));
             return generateTokenResponse(user.getId());
         }
@@ -181,11 +181,11 @@ public class AuthService {
         newUser.setId(newId.toString());
         newUser.setFull_name(userInfo.getFamily_name()+" "+userInfo.getGiven_name()); // full = family + given ?
         newUser.setEmail(userInfo.getEmail());
-        newUser.setUsername(userInfo.getEmail());
+        newUser.setUser_name(userInfo.getEmail());
         newUser.setPassword(newId.toString());
         //---------------
         googleEntity.setUser_id(newUser.getId());
-        googleRepository.create(googleEntity);
+        googleRepository.save(googleEntity);
         return registerUser(newUser);
         //-------------------------
     }
