@@ -1,4 +1,4 @@
-package com.win.server.DTO;
+package com.win.server.DTO.auth.oauth;
 
 import lombok.*;
 

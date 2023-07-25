@@ -18,7 +18,7 @@ public class UserEntity implements UserDetails {
     @Id
     private String id;
 
-    @Column(name = "username")
+    @Column(name="username")
     private String user_name;
 
     private String password;
@@ -28,6 +28,7 @@ public class UserEntity implements UserDetails {
     private String email;
 
     private String phone;
+
 
 
     @Override

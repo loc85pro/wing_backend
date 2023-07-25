@@ -1,12 +1,12 @@
-package com.win.server.DTO;
+package com.win.server.DTO.auth;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 @AllArgsConstructor
-@Setter
-@Getter
 public class TokenResponse {
     private String accessToken;
     private String refreshToken;

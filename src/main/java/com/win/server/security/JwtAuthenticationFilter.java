@@ -44,11 +44,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         System.out.println("not filter JWT");
         String requestPath = request.getServletPath();
         System.out.println("Hello: " + requestPath);
-        String[] whiteList = {"/login/basic","/register/basic",};
+        String[] whiteList = {"/login/basic","/register/basic","/swagger-ui.html"};
         for (String path : whiteList) {
             if (path.equals(requestPath))
                 return true;
         }
-        return false;
+        return true;
     }
 }

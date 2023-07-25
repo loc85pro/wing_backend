@@ -1,16 +1,10 @@
-package com.win.server.DTO;
+package com.win.server.DTO.auth.oauth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
-@AllArgsConstructor
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class OAuthTokenResponse implements Serializable {
     private String access_token;
     private String refresh_token;
