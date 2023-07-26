@@ -48,7 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         for (String path : whiteList) {
             if (path.equals(requestPath))
                 return true;
+            if (requestPath.startsWith("/login"))
+                return true;
         }
-        return true;
+        return false;
     }
 }
