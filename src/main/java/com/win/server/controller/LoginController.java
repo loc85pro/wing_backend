@@ -7,6 +7,7 @@ import com.win.server.DTO.auth.basic.UsernamePasswordLoginRequest;
 import com.win.server.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,13 @@ public class LoginController {
     private AuthService authService;
     @PostMapping("/basic/email-password")
     @ResponseStatus(HttpStatus.OK)
-    public TokenResponse emailPasswordLogin(@RequestBody EmailPasswordLoginRequest request) {
+    public TokenResponse emailPasswordLogin(@RequestBody @Valid EmailPasswordLoginRequest request) {
              return authService.emailPasswordLogin(request.getEmail(), request.getPassword());
     }
 
     @PostMapping("/basic/username-password")
     @ResponseStatus(HttpStatus.OK)
-    public TokenResponse usernamePassword(@RequestBody UsernamePasswordLoginRequest request) {
+    public TokenResponse usernamePassword(@RequestBody @Valid UsernamePasswordLoginRequest request) {
         return authService.usernamePasswordLogin(request.getUsername(), request.getPassword());
     }
 

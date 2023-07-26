@@ -63,7 +63,7 @@ public class AuthService {
     public TokenResponse loginWithPassword(UserEntity user, String password) {
         UserDetails userDetails = userDetailService.loadUserByUsername(user.getId());
         if (userDetails == null)
-            throw new UserNotFoundException("");
+            throw new UserNotFoundException();
         if (!passwordEncoder.matches(password, userDetails.getPassword()))
             throw new IncorrectPasswordException();
         setUserContext(userDetails);

@@ -1,6 +1,7 @@
 package com.win.server.repository;
 
 import com.win.server.entity.UserEntity;
+import com.win.server.exception.myexception.UserNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -22,23 +23,44 @@ import java.util.Optional;
 public class UserRepository  {
     private final EntityManager entityManager;
     public UserEntity findByEmail(String email) {
-        return (UserEntity) entityManager.createQuery("FROM UserEntity user WHERE user.email=:email").setParameter("email",email).getSingleResult();
+        try {
+            return (UserEntity) entityManager.createQuery("FROM UserEntity user WHERE user.email=:email").setParameter("email",email).getSingleResult();
+        } catch (Exception ex) {
+            throw  new UserNotFoundException();
+        }
     }
 
     public UserEntity findByUsername(String username) {
-        return (UserEntity) entityManager.createQuery("FROM UserEntity user WHERE user.user_name=:username").setParameter("username",username).getSingleResult();
+        try {
+            return (UserEntity) entityManager.createQuery("FROM UserEntity user WHERE user.user_name=:username").setParameter("username",username).getSingleResult();
+        } catch (Exception ex) {
+            throw  new UserNotFoundException();
+        }
     }
-
     public UserEntity findById(String id) {
-        return entityManager.find(UserEntity.class, id);
+
+        try {
+            return entityManager.find(UserEntity.class, id);
+        } catch (Exception ex) {
+            throw  new UserNotFoundException();
+        }
     }
 
     public UserEntity findByPhone(String phone) {
-        return (UserEntity) entityManager.createQuery("FROM UserEntity user WHERE user.phone=:phone").setParameter("phone",phone).getSingleResult();
+        try {
+            return (UserEntity) entityManager.createQuery("FROM UserEntity user WHERE user.phone=:phone").setParameter("phone",phone).getSingleResult();
+        } catch (Exception ex) {
+            throw  new UserNotFoundException();
+        }
     }
 
     @Transactional
     public void save(UserEntity user) {
+        try {
             entityManager.persist(user);
+        } catch (Exception ex) {
+            System.out.println("This is error: " + ex);
+        }
+
     }
 }
