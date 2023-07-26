@@ -1,6 +1,7 @@
 package com.win.server.controller;
 
 import com.win.server.service.FileService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import java.io.*;
 @RestController
 @RequestMapping("/public")
 @RequiredArgsConstructor
+@Tag(name = "Public API")
 public class PublicController {
     private final FileService fileService;
 
