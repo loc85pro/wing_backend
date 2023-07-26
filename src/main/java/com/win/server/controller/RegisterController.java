@@ -18,7 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/register")
 @AllArgsConstructor
-@Tag(name="Register")
+@Tag(name="Auth")
 public class RegisterController {
     private AuthService authService;
 

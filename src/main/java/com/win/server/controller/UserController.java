@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/user")
-@Tag(name = "User Data")
+@Tag(name = "Personal Data")
 public class UserController {
     private UserService userService;
     private ContextUserManager contextUserManager;
 
-    @Operation(description = "Get own data (User data)")
+    @Operation(description = "Get own data (Brief data)")
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getOwnData() {
