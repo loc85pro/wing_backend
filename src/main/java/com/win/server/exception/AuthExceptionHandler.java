@@ -1,5 +1,6 @@
 package com.win.server.exception;
 
+import com.win.server.exception.myexception.FileGeneralException;
 import com.win.server.exception.myexception.IncorrectPasswordException;
 import com.win.server.exception.myexception.TokenNotFoundException;
 import com.win.server.exception.myexception.UserNotFoundException;
@@ -44,5 +45,11 @@ public class AuthExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMalformedRequest(BindException ex, WebRequest request) {
         return new ErrorResponse(ex.getAllErrors().get(0).getDefaultMessage(), 400);
+    }
+
+    @ExceptionHandler(FileGeneralException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleFileError() {
+        return new ErrorResponse("Catch error when handle your file", 500);
     }
 }

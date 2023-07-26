@@ -1,26 +1,34 @@
 package com.win.server.service;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
+import com.win.server.exception.myexception.FileGeneralException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileService {
-    public void saveFile(MultipartFile file, String filename, String path) throws FileNotFoundException, IOException {
-        File parentFolder = new File(path);
-        boolean isExist = parentFolder.mkdirs();
-        File myFile = new File(path + '/' + filename);
-        FileOutputStream out = new FileOutputStream(myFile);
-        out.write(file.getBytes());
+    public void saveFile(MultipartFile file, String filename, String path) {
+        try {
+            File parentFolder = new File(path);
+            boolean isExist = parentFolder.mkdirs();
+            File myFile = new File(path + '/' + filename);
+            FileOutputStream out = new FileOutputStream(myFile);
+            out.write(file.getBytes());
+        } catch (Exception ex) {
+            throw new FileGeneralException();
+        }
+
     }
 
-    public File loadAvatar(String username) {
-        File defaultAvatar = new File("/src/main/resources/static/data/user/" + username + "/avatar.jpg"); //Personal avatar
-        if (!defaultAvatar.exists())
-            return new File("/src/main/resources/static/general/default_avatar.png"); //Default avatar
-        return defaultAvatar;
+    public byte[] loadAvatar(String userId) throws FileNotFoundException , IOException{
+        String path = "src/main/resources/public/user/" + userId + "/avatar.png";
+        File defaultAvatar = new File(path); //Personal avatar
+        System.out.println(defaultAvatar.getAbsolutePath());
+        FileInputStream in;
+        if (!defaultAvatar.exists())   // User's avatar not exsit => default avatar
+            in = new FileInputStream("src/main/resources/public/static/general/default_avatar.png");
+        else
+            in = new FileInputStream(path);
+        return in.readAllBytes();
     }
 }

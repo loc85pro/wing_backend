@@ -25,6 +25,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        if (request.getMethod().equals("OPTION"))
+            filterChain.doFilter(request,response);
         String token = getTokenFromRequest(request);
         String userId = jwtProvider.getUserIdFromToken(token);
         UserDetails userDetail = userDetailService.loadUserByUsername(userId);
@@ -40,13 +42,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     }
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         System.out.println("not filter JWT");
+
         String requestPath = request.getServletPath();
         System.out.println("Hello: " + requestPath);
         String[] whiteList = {"/login/basic","/register/basic"};
         for (String path : whiteList) {
             if (path.equals(requestPath))
                 return true;
-            if (requestPath.startsWith("/login")||requestPath.startsWith("/swagger-ui")||requestPath.startsWith("/v3"))
+            if (requestPath.startsWith("/login")||requestPath.startsWith("/swagger-ui")||requestPath.startsWith("/v3")||requestPath.startsWith("/public"))
                 return true;
         }
         return false;
