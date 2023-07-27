@@ -27,7 +27,7 @@ public class UserService {
     }
 
     public void uploadAvatar(MultipartFile file)  {
-        String userId = ContextUserManager.getUsername();
+        String userId = ContextUserManager.getUserId();
         String avatarPath = "src/main/resources/public/user/" + userId;
         fileService.saveFile(file, "avatar.png", avatarPath);
     }

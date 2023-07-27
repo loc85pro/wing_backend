@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 public class ContextUserManager {
-    static public String getUsername() {
+    static public String getUserId() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails)
             return ((UserDetails) principal).getUsername();

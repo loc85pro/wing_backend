@@ -23,12 +23,17 @@ public class FileService {
     public byte[] loadAvatar(String userId) throws FileNotFoundException , IOException{
         String path = "src/main/resources/public/user/" + userId + "/avatar.png";
         File defaultAvatar = new File(path); //Personal avatar
-        System.out.println(defaultAvatar.getAbsolutePath());
         FileInputStream in;
         if (!defaultAvatar.exists())   // User's avatar not exsit => default avatar
             in = new FileInputStream("src/main/resources/public/static/general/default_avatar.png");
         else
             in = new FileInputStream(path);
+        return in.readAllBytes();
+    }
+
+    public byte[] loadImage(String image_id) throws FileNotFoundException, IOException {
+        String path = "src/main/resources/public/image/" + image_id + ".png";
+        FileInputStream in = new FileInputStream(path);
         return in.readAllBytes();
     }
 }

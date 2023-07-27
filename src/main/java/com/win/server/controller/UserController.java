@@ -28,7 +28,7 @@ public class UserController {
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
     public UserDTO getOwnData() {
-        return userService.getUserById(ContextUserManager.getUsername());
+        return userService.getUserById(ContextUserManager.getUserId());
     }
     @PostMapping("/avatar")
     public SimpleMessage uploadAvatar(@RequestParam("file") MultipartFile file) {

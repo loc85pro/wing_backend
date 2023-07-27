@@ -25,10 +25,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        if (request.getMethod().equals("OPTION"))
-            filterChain.doFilter(request,response);
         String token = getTokenFromRequest(request);
-        String userId = jwtProvider.getUserIdFromToken(token);
+        if (token.length()==0) {
+            response.getWriter().write("Sao deo co Token???????");
+            response.setStatus(400);
+            return;
+        }
+        String userId;
+        try {
+            userId = jwtProvider.getUserIdFromToken(token);
+        } catch (Exception ex) {
+            response.setStatus(401);
+            response.getWriter().write("Invalid or malformed token");
+            return;
+        }
         UserDetails userDetail = userDetailService.loadUserByUsername(userId);
         authService.setUserContext(userDetail);
         filterChain.doFilter(request,response);
@@ -38,11 +48,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         System.out.println("Token from request: "+token);
         if (token != null && token.startsWith("Bearer "))
             return token.replace("Bearer ", "");
-        throw new TokenNotFoundException("");
+        else
+            return "";
     }
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         System.out.println("not filter JWT");
-
+        if (request.getMethod().equals("OPTIONS"))
+            return true;
         String requestPath = request.getServletPath();
         System.out.println("Hello: " + requestPath);
         String[] whiteList = {"/login/basic","/register/basic"};

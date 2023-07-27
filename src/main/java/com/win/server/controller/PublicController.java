@@ -1,5 +1,6 @@
 package com.win.server.controller;
 
+import com.win.server.exception.myexception.FileGeneralException;
 import com.win.server.service.FileService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,5 +24,15 @@ public class PublicController {
     @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getAvatar(@RequestParam String user_id) throws FileNotFoundException, IOException {
         return fileService.loadAvatar(user_id);
+    }
+
+    @GetMapping(value = "/post", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getPostMediaById(@RequestParam("id") String id) {
+        try {
+            return fileService.loadImage(id);
+        }   catch (Exception ex) {
+            throw new FileGeneralException();
+        }
+
     }
 }
