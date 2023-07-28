@@ -17,6 +17,6 @@ public class UserDTO {
         this.id=entity.getId();
         this.user_name=entity.getUsername();
         this.full_name=entity.getFull_name();
-        this.avatarURL = "http://localhost:8080/public/avatar?user_id=" + entity.getId();
+        this.avatarURL = "/public/avatar?user_id=" + entity.getId();
     }
 }

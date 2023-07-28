@@ -14,12 +14,12 @@ import java.sql.Timestamp;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name="post")
 public class PostEntity {
     @Id
     private String id;
     private String initiator_id;
     private String owner_id;
+    private
     private String caption;
     private String image;
     private Timestamp create_at;
