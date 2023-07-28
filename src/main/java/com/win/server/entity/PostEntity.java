@@ -1,6 +1,5 @@
 package com.win.server.entity;
 
-import com.win.server.constant.PostPrivacy;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

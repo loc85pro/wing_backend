@@ -32,7 +32,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler(TokenNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleTokenNotFound(Exception ex, WebRequest request) {
-        return new ErrorResponse("Sao de'o co token?", 401);
+        return new ErrorResponse("Sao deo co token?", 401);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)

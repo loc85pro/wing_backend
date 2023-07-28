@@ -5,7 +5,4 @@ public class IncorrectPasswordException extends RuntimeException{
         super();
     }
 
-    public IncorrectPasswordException(String message) {
-        super(message);
-    }
 }

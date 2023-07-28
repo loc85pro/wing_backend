@@ -1,6 +1,8 @@
 package com.win.server.service;
 
+import com.win.server.entity.CommentEntity;
 import com.win.server.entity.PostEntity;
+import com.win.server.repository.CommentRepository;
 import com.win.server.repository.PostRepository;
 import com.win.server.security.ContextUserManager;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.UUID;
 public class PostService {
     private final PostRepository postRepository;
     private final FileService fileService;
+    private final CommentRepository commentRepository;
     public PostEntity createPost(String caption, MultipartFile media, String privacy) {
         PostEntity newPost = new PostEntity();
         newPost.setId(UUID.randomUUID().toString());
@@ -41,5 +44,16 @@ public class PostService {
 
     public List<PostEntity> getPostByOwner(String owner_id) {
         return postRepository.findByOwner(owner_id);
+    }
+
+    public CommentEntity uploadComment(String post_id, String content) {
+        PostEntity post = postRepository.findById(post_id);
+        CommentEntity comment = new CommentEntity();
+        comment.setId(UUID.randomUUID().toString());
+        comment.setPost_id(post_id);
+        comment.setUser_id(ContextUserManager.getUserId());
+        comment.setContent(content);
+        comment.setCreate_at(new Timestamp(System.currentTimeMillis()));
+        return commentRepository.saveComment(comment);
     }
 }
