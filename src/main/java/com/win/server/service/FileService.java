@@ -31,8 +31,14 @@ public class FileService {
         return in.readAllBytes();
     }
 
-    public byte[] loadImage(String image_id) throws FileNotFoundException, IOException {
+    public byte[] loadPublicImage(String image_id) throws IOException {
         String path = "src/main/resources/public/image/" + image_id + ".png";
+        FileInputStream in = new FileInputStream(path);
+        return in.readAllBytes();
+    }
+
+    public byte[] loadPublicGeneralFile(String file_name) throws IOException{
+        String path = "src/main/resources/public/static/general/" + file_name;
         FileInputStream in = new FileInputStream(path);
         return in.readAllBytes();
     }
