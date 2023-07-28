@@ -16,7 +16,7 @@ import java.util.UUID;
 public class PostService {
     private final PostRepository postRepository;
     private final FileService fileService;
-    public PostEntity createPost(String caption, MultipartFile media) {
+    public PostEntity createPost(String caption, MultipartFile media, String privacy) {
         PostEntity newPost = new PostEntity();
         newPost.setId(UUID.randomUUID().toString());
         newPost.setCreate_at(new Timestamp(System.currentTimeMillis()));
@@ -24,6 +24,7 @@ public class PostService {
         newPost.setOwner_id(user_current);
         newPost.setInitiator_id(user_current);
         newPost.setCaption(caption);
+        newPost.setPrivacy(privacy);
         //----- SAVE MEDIA FILE ------
         String fileId =  UUID.randomUUID().toString().replace("-","");
         String fileName = fileId + ".png";

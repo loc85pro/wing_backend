@@ -1,6 +1,7 @@
 package com.win.server.controller;
 
 import com.win.server.DTO.post.CreatePostRequest;
+import com.win.server.constant.PostPrivacy;
 import com.win.server.entity.PostEntity;
 import com.win.server.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,9 @@ public class PostController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostEntity createPost(@RequestParam String caption, @RequestParam("file") MultipartFile file) {
-        return postService.createPost(caption ,file);
+    public PostEntity createPost(@RequestParam String caption, @RequestParam PostPrivacy privacy, @RequestParam("file") MultipartFile file) {
+        String privacyPost = privacy.toString();
+        return postService.createPost(caption ,file, privacyPost);
     }
 
     @GetMapping

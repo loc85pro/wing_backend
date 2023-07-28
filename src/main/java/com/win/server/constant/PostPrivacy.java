@@ -1,4 +1,7 @@
 package com.win.server.constant;
 
-public class PostPrivacy {
+public enum PostPrivacy {
+    PRIVATE,
+    PUBLIC,
+    FRIEND,
 }
