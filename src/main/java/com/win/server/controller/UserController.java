@@ -29,4 +29,5 @@ public class UserController {
         userService.uploadAvatar(file);
         return new SimpleMessage("Successfully",200,"Upload done!");
     }
+
 }

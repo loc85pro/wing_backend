@@ -1,11 +1,16 @@
 package com.win.server.controller;
 
+import com.win.server.DTO.UserDTO;
 import com.win.server.exception.myexception.FileGeneralException;
+import com.win.server.exception.myexception.UserNotFoundException;
+import com.win.server.security.ContextUserManager;
 import com.win.server.service.FileService;
+import com.win.server.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
@@ -16,6 +21,7 @@ import java.io.*;
 @Tag(name = "Public API")
 public class PublicController {
     private final FileService fileService;
+    private final UserService userService;
 
     @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -41,5 +47,16 @@ public class PublicController {
         }   catch (Exception ex) {
             throw new FileGeneralException();
         }
+    }
+    @GetMapping("/user")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO getUserByIdOrUsername(@RequestParam(required = false) String id , @RequestParam(required = false) String username) {
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        if (id==null && username==null)
+            throw new UserNotFoundException();
+        if (id!=null)
+            return userService.getUserById(id);
+        else
+            return userService.getUserByUsername(username);
     }
 }

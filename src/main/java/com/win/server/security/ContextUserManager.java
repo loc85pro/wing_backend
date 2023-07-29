@@ -12,4 +12,5 @@ public class ContextUserManager {
         else
             return principal.toString();
     }
+
 }

@@ -1,6 +1,7 @@
 package com.win.server.repository;
 
 import com.win.server.entity.RelationshipEntity;
+import com.win.server.exception.myexception.UnknownException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Table;
@@ -29,12 +30,23 @@ public class RelationshipRepository {
     }
 
     public RelationshipEntity getRelationShip(String user_1, String user_2) {
-        return (RelationshipEntity) entityManager.createQuery("FROM RelationshipEntity rel WHERE (rel.user_1=:id_1 AND rel.user_2=:id_2) OR (rel.user_1=:id_2 AND rel.user_2=:id_1) ORDER BY rel.create_at").setParameter("id_1",user_1).setParameter("id_2",user_2).getSingleResult();
+        List<RelationshipEntity> rs = entityManager.createQuery("FROM RelationshipEntity rel WHERE (rel.user_1=:id_1 AND rel.user_2=:id_2) OR (rel.user_1=:id_2 AND rel.user_2=:id_1) ORDER BY rel.create_at").setParameter("id_1",user_1).setParameter("id_2",user_2).getResultList();
+        switch (rs.size()) {
+            case 0:
+                return null;
+            case 1:
+                return rs.get(0);
+            default:
+                throw new UnknownException();
+        }
     }
 
-    public RelationshipEntity setNewRelationShip() {
-        List<RelationshipEntity> rs = new ArrayList<RelationshipEntity>(entityManager.createQuery("FROM RelationshipEntity rel WHERE rel.status=:status").setParameter("status", "FRIEND").getResultList());
-        return null;
-
+    public RelationshipEntity setNewRelationShip(RelationshipEntity entity) {
+        List<RelationshipEntity> rs = entityManager.createQuery("FROM RelationshipEntity rel WHERE rel.status=:status").setParameter("status", "FRIEND").getResultList();
+        if (rs.size()>0) {
+            rs.forEach((ele) -> {entityManager.remove(ele);});
+        }
+        entityManager.persist(entity);
+        return entity;
     }
 }

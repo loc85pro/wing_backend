@@ -1,9 +1,6 @@
 package com.win.server.exception;
 
-import com.win.server.exception.myexception.FileGeneralException;
-import com.win.server.exception.myexception.IncorrectPasswordException;
-import com.win.server.exception.myexception.TokenNotFoundException;
-import com.win.server.exception.myexception.UserNotFoundException;
+import com.win.server.exception.myexception.*;
 import com.win.server.DTO.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
@@ -51,5 +48,17 @@ public class AuthExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleFileError() {
         return new ErrorResponse("Catch error when handle your file", 500);
+    }
+
+    @ExceptionHandler(UnknownException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handdleUnknownError() {
+        return new ErrorResponse("Something not right in server", 500);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFound() {
+        return new ErrorResponse("Not found", 404);
     }
 }
