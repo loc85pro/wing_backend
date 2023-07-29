@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -131,5 +129,20 @@ public class PostService {
             rs.add(temp);
         });
         return rs;
+    }
+
+    public List<PostEntity> getAllVisibleOfFriendPost() {
+        String current_user = ContextUserManager.getUserId();
+        List<RelationshipEntity> relationshipList = relationshipService.getRelationship(current_user);
+        List<String> friendIdList = new ArrayList<String>();
+        relationshipList.forEach(relationship -> {
+            friendIdList.add(relationship.getUser_1().equals(current_user) ? relationship.getUser_2(): relationship.getUser_1());
+        });
+        List<PostEntity> listPost = new ArrayList<PostEntity>();
+        friendIdList.forEach(id-> {
+            listPost.addAll(postRepository.findByOwner(id));
+        });
+        Collections.sort(listPost);
+        return listPost;
     }
 }

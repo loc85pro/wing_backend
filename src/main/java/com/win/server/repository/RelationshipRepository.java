@@ -25,11 +25,11 @@ public class RelationshipRepository {
         return entityManager.find(RelationshipEntity.class, id);
     }
 
-    public List<RelationshipEntity> getAllFriend(String user_id) {
+    public List<RelationshipEntity> getRelationship(String user_id) {
         return entityManager.createQuery("FROM RelationshipEntity rel WHERE rel.user_1=:id OR rel.user_2=:id ORDER BY rel.create_at").setParameter("id",user_id).getResultList();
     }
 
-    public RelationshipEntity getRelationShip(String user_1, String user_2) {
+    public RelationshipEntity getRelationship(String user_1, String user_2) {
         List<RelationshipEntity> rs = entityManager.createQuery("FROM RelationshipEntity rel WHERE (rel.user_1=:id_1 AND rel.user_2=:id_2) OR (rel.user_1=:id_2 AND rel.user_2=:id_1) ORDER BY rel.create_at").setParameter("id_1",user_1).setParameter("id_2",user_2).getResultList();
         switch (rs.size()) {
             case 0:

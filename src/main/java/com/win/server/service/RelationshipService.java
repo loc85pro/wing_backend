@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,10 @@ public class RelationshipService {
     }
 
     public RelationshipEntity getRelationship(String user_1, String user_2) {
-        return relationshipRepository.getRelationShip(user_1,user_2);
+        return relationshipRepository.getRelationship(user_1,user_2);
+    }
+
+    public List<RelationshipEntity> getRelationship(String user_id) {
+        return relationshipRepository.getRelationship(user_id);
     }
 }

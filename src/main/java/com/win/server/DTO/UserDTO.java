@@ -12,7 +12,7 @@ public class UserDTO {
 
     public UserDTO(UserEntity entity) {
         this.id=entity.getId();
-        this.user_name=entity.getUsername();
+        this.user_name=entity.getUser_name();
         this.full_name=entity.getFull_name();
         this.avatarURL = "/public/avatar?user_id=" + entity.getId();
     }

@@ -66,5 +66,10 @@ public class PostController {
             return postService.getPostByUsername(username);
     }
     //-------------
+    @GetMapping("/new_feed")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostEntity> getNewFeed() {
+        return postService.getAllVisibleOfFriendPost();
+    }
 
 }
