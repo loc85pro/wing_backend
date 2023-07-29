@@ -125,7 +125,7 @@ public class PostService {
             temp.setContent(comment.getContent());
             temp.setUpdate_at(comment.getUpdate_at());
             temp.setCreate_at(comment.getCreate_at());
-            UserDTO user = userService.getUserById(temp.getId());
+            UserDTO user = userService.getUserById(temp.getUser_id());
             temp.setFull_name(user.getFull_name());
             temp.setAvatar(user.getAvatarURL());
             rs.add(temp);
