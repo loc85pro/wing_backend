@@ -58,17 +58,6 @@ public class PostService {
     }
 
 
-    public CommentEntity uploadComment(String post_id, String content) {
-        PostEntity post = postRepository.findById(post_id);
-        CommentEntity comment = new CommentEntity();
-        comment.setId(UUID.randomUUID().toString());
-        comment.setPost_id(post_id);
-        comment.setUser_id(ContextUserManager.getUserId());
-        comment.setContent(content);
-        comment.setCreate_at(new Timestamp(System.currentTimeMillis()));
-        return commentRepository.saveComment(comment);
-    }
-
     //----------------
     public PostEntity getPostById(String id) {
         PostEntity post = postRepository.findById(id);
@@ -110,5 +99,20 @@ public class PostService {
                     return false;
                 }
         ).collect(Collectors.toList());
+    }
+    //---------------------------COMMENT--------------------
+    public CommentEntity uploadComment(String post_id, String content) {
+        PostEntity post = postRepository.findById(post_id);
+        CommentEntity comment = new CommentEntity();
+        comment.setId(UUID.randomUUID().toString());
+        comment.setPost_id(post_id);
+        comment.setUser_id(ContextUserManager.getUserId());
+        comment.setContent(content);
+        comment.setCreate_at(new Timestamp(System.currentTimeMillis()));
+        return commentRepository.saveComment(comment);
+    }
+
+    public List<CommentEntity> getCommentByPostId(String post_id) {
+        return commentRepository.getAllCommentByPost(post_id);
     }
 }

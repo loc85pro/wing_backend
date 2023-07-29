@@ -48,6 +48,12 @@ public class PostController {
         return postService.uploadComment(request.getPost_id(), request.getContent());
     }
 
+    @GetMapping("/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentEntity> getPostComment(@RequestParam String post_id) {
+        return postService.getCommentByPostId(post_id);
+    }
+
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public List<PostEntity> getPostByUser(@RequestParam(required = false) String user_id, @RequestParam(required = false) String username) {
