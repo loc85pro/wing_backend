@@ -4,17 +4,16 @@ import com.win.server.constant.RelationshipStatus;
 import com.win.server.entity.RelationshipEntity;
 import com.win.server.repository.RelationshipRepository;
 import com.win.server.service.RelationshipService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/relationship")
 @RequiredArgsConstructor
+@Tag( name = "Relationship")
 public class RelationshipController {
     private final RelationshipService relationshipService;
 
