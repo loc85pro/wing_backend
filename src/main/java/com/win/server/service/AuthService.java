@@ -68,7 +68,7 @@ public class AuthService {
             throw new IncorrectPasswordException();
         setUserContext(userDetails);
         String accessToken = jwtProvider.generateToken(user.getId(), 120000L); //2 minutes
-        String refreshToken = jwtProvider.generateToken(user.getId(), 1800000L); //2 minutes
+        String refreshToken = jwtProvider.generateToken(user.getId(), 1800000L); //15 minutes
         return new TokenResponse(accessToken, refreshToken);
     }
 

@@ -9,11 +9,12 @@ import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "friend")
-public class FriendEntity {
+@Table(name = "relationship")
+public class RelationshipEntity {
     @Id
     private String id;
     private String user_1;
     private String user_2;
+    private String status;
     private Timestamp create_at;
 }
