@@ -1,5 +1,6 @@
 package com.win.server.controller;
 
+import com.win.server.DTO.post.CommentDTO;
 import com.win.server.DTO.post.CommentUploadRequest;
 import com.win.server.constant.PostPrivacy;
 import com.win.server.entity.CommentEntity;
@@ -50,7 +51,7 @@ public class PostController {
 
     @GetMapping("/comment")
     @ResponseStatus(HttpStatus.OK)
-    public List<CommentEntity> getPostComment(@RequestParam String post_id) {
+    public List<CommentDTO> getPostComment(@RequestParam String post_id) {
         return postService.getCommentByPostId(post_id);
     }
 

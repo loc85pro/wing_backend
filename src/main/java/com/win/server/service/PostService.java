@@ -1,6 +1,7 @@
 package com.win.server.service;
 
 import com.win.server.DTO.UserDTO;
+import com.win.server.DTO.post.CommentDTO;
 import com.win.server.constant.RelationshipStatus;
 import com.win.server.entity.CommentEntity;
 import com.win.server.entity.PostEntity;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -112,7 +114,22 @@ public class PostService {
         return commentRepository.saveComment(comment);
     }
 
-    public List<CommentEntity> getCommentByPostId(String post_id) {
-        return commentRepository.getAllCommentByPost(post_id);
+    public List<CommentDTO> getCommentByPostId(String post_id) {
+        List<CommentEntity> listComment = commentRepository.getAllCommentByPost(post_id);
+        List<CommentDTO>  rs = new ArrayList<CommentDTO>();
+        listComment.forEach(comment -> {
+            CommentDTO temp = new CommentDTO();
+            temp.setId(comment.getId());
+            temp.setUser_id(comment.getUser_id());
+            temp.setPost_id(comment.getPost_id());
+            temp.setContent(comment.getContent());
+            temp.setUpdate_at(comment.getUpdate_at());
+            temp.setCreate_at(comment.getCreate_at());
+            UserDTO user = userService.getUserById(temp.getId());
+            temp.setFull_name(user.getFull_name());
+            temp.setAvatar(user.getAvatarURL());
+            rs.add(temp);
+        });
+        return rs;
     }
 }
