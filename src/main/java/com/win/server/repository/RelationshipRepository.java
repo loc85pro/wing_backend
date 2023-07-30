@@ -52,4 +52,9 @@ public class RelationshipRepository {
         entityManager.persist(entity);
         return entity;
     }
+
+    @Transactional
+    public void remove(RelationshipEntity entity) {
+        entityManager.remove(entity);
+    }
 }
