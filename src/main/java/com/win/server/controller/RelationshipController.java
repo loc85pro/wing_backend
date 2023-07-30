@@ -20,12 +20,6 @@ import org.springframework.web.servlet.function.EntityResponse;
 public class RelationshipController {
     private final RelationshipService relationshipService;
 
-    @PostMapping("/set")
-    @ResponseStatus(HttpStatus.CREATED)
-    public RelationshipEntity setRelationship(@RequestParam String user_id, @RequestParam RelationshipStatus status) {
-        return relationshipService.setNewRelationship(user_id, status.toString());
-    }
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public RelationshipEntity getRelationship(@RequestParam String user_id) {

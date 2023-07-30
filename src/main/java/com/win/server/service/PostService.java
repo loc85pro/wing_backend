@@ -2,6 +2,7 @@ package com.win.server.service;
 
 import com.win.server.DTO.UserDTO;
 import com.win.server.DTO.post.CommentDTO;
+import com.win.server.DTO.post.PostDTO;
 import com.win.server.constant.RelationshipStatus;
 import com.win.server.entity.CommentEntity;
 import com.win.server.entity.PostEntity;
@@ -27,7 +28,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final RelationshipService relationshipService;
     private final UserService userService;
-    public PostEntity createPost(String caption, MultipartFile media, String privacy) {
+    public PostDTO createPost(String caption, MultipartFile media, String privacy) {
         PostEntity newPost = new PostEntity();
         newPost.setId(UUID.randomUUID().toString());
         newPost.setCreate_at(new Timestamp(System.currentTimeMillis()));
@@ -43,26 +44,32 @@ public class PostService {
         String getImageURL = "/public/post?id=" + fileId;
         newPost.setImage(getImageURL);
         postRepository.savePost(newPost);
-        return postRepository.findById(newPost.getId());
+        return convertToDTO(postRepository.findById(newPost.getId()));
     }
 
 
-    public List<PostEntity> getPostByUserId(String user_id) {
+    public List<PostDTO> getPostByUserId(String user_id) {
         List<PostEntity> listPost = postRepository.findByOwner(user_id);
-        return filterVisiblePost(listPost);
+        return  filterVisiblePost(listPost).stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public List<PostEntity> getPostByUsername(String username) {
+    public PostDTO convertToDTO(PostEntity post) {
+        UserDTO initiator = userService.getUserById(post.getInitiator_id());
+        UserDTO owner = userService.getUserById(post.getOwner_id());
+        return new PostDTO(post, initiator, owner);
+    }
+
+    public List<PostDTO> getPostByUsername(String username) {
         UserDTO user = userService.getUserByUsername(username);
         return getPostByUserId(user.getId());
     }
 
 
     //----------------
-    public PostEntity getPostById(String id) {
+    public PostDTO getPostById(String id) {
         PostEntity post = postRepository.findById(id);
         if (post.getPrivacy().equals("PUBLIC"))
-            return post;
+            return convertToDTO(post);
         if (post.getPrivacy().equals("PRIVATE"))
             throw new NotFoundException();
         if (ContextUserManager.getUserId().equals("anonymousUser"))
@@ -72,7 +79,7 @@ public class PostService {
         RelationshipEntity relationship = relationshipService.getRelationship(ContextUserManager.getUserId(), post.getOwner_id());
         RelationshipStatus status = RelationshipStatus.valueOf(relationship.getStatus());
         return switch (status) {
-            case FRIEND, CLOSE_FRIEND -> post;
+            case FRIEND, CLOSE_FRIEND -> convertToDTO(post);
             case BLOCK, PENDING -> throw new NotFoundException();
         };
     }

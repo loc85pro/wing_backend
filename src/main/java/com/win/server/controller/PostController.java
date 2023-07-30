@@ -2,6 +2,7 @@ package com.win.server.controller;
 
 import com.win.server.DTO.post.CommentDTO;
 import com.win.server.DTO.post.CommentUploadRequest;
+import com.win.server.DTO.post.PostDTO;
 import com.win.server.constant.PostPrivacy;
 import com.win.server.entity.CommentEntity;
 import com.win.server.entity.PostEntity;
@@ -25,20 +26,20 @@ public class PostController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostEntity createPost(@RequestParam String caption, @RequestParam PostPrivacy privacy, @RequestParam("file") MultipartFile file) {
+    public PostDTO createPost(@RequestParam String caption, @RequestParam PostPrivacy privacy, @RequestParam("file") MultipartFile file) {
         String privacyPost = privacy.toString();
         return postService.createPost(caption ,file, privacyPost);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public PostEntity getPostById(@RequestParam String id) {
+    public PostDTO getPostById(@RequestParam String id) {
         return postService.getPostById(id);
     }
 
     @GetMapping("/me")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostEntity> getOwnPost() {
+    public List<PostDTO> getOwnPost() {
         String current_user_id = ContextUserManager.getUserId();
         return postService.getPostByUserId(current_user_id);
     }
@@ -57,7 +58,7 @@ public class PostController {
 
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostEntity> getPostByUser(@RequestParam(required = false) String user_id, @RequestParam(required = false) String username) {
+    public List<PostDTO> getPostByUser(@RequestParam(required = false) String user_id, @RequestParam(required = false) String username) {
         if (user_id==null && username==null)
             throw new UserNotFoundException();
         if (user_id!=null)
