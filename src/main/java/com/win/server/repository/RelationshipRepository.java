@@ -5,6 +5,7 @@ import com.win.server.exception.myexception.UnknownException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Table;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class RelationshipRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional
     public RelationshipEntity save(RelationshipEntity entity) {
         entityManager.persist(entity);
         return entity;
@@ -41,6 +43,7 @@ public class RelationshipRepository {
         }
     }
 
+    @Transactional
     public RelationshipEntity setNewRelationShip(RelationshipEntity entity) {
         List<RelationshipEntity> rs = entityManager.createQuery("FROM RelationshipEntity rel WHERE rel.status=:status").setParameter("status", "FRIEND").getResultList();
         if (rs.size()>0) {

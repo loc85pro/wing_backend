@@ -82,11 +82,16 @@ public class PostService {
         if (current_user.equals("anonymousUser"))
            return listPost.stream().filter(post -> post.getPrivacy().equals("PUBLIC")).collect(Collectors.toList());
         return listPost.stream().filter(post -> {
+                    if (post.getPrivacy().equals("PUBLIC"))
+                        return true;
                     if (current_user.equals(post.getOwner_id()))  // Allow for post owner, right? :D
                         return true;
                     if (post.getPrivacy().equals("PRIVATE"))    // Private post is not allow for anyone (Case of owner just handle above)
                         return false;
                     RelationshipEntity relationship = relationshipService.getRelationship(current_user, post.getOwner_id());
+                    if (relationship==null)
+                        return post.getPrivacy().equals("PUBLIC");
+
                     RelationshipStatus status = RelationshipStatus.valueOf(relationship.getStatus());
                     switch (status) {
                         case FRIEND, CLOSE_FRIEND -> {
