@@ -61,6 +61,14 @@ public class UserRepository  {
         } catch (Exception ex) {
             System.out.println("This is error: " + ex);
         }
+    }
+    @Transactional
+    public void remove(UserEntity entity) {
+        entityManager.remove(entity);
+    }
 
+    @Transactional
+    public void update(UserEntity entity) {
+        entityManager.persist(entity);
     }
 }

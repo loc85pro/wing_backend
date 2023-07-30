@@ -31,9 +31,9 @@ public class PublicController {
 
     @GetMapping(value = "/post", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public byte[] getPostMediaById(@RequestParam("id") String image_id) {
+    public byte[] getPostMediaById(@RequestParam("file_name") String image_name) {
         try {
-            return fileService.loadPublicImage(image_id);
+            return fileService.loadPublicImage(image_name);
         }   catch (Exception ex) {
             throw new FileGeneralException();
         }

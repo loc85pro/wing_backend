@@ -45,7 +45,7 @@ public class RelationshipRepository {
 
     @Transactional
     public RelationshipEntity setNewRelationShip(RelationshipEntity entity) {
-        List<RelationshipEntity> rs = entityManager.createQuery("FROM RelationshipEntity rel WHERE rel.status=:status").setParameter("status", "FRIEND").getResultList();
+        List<RelationshipEntity> rs = entityManager.createQuery("FROM RelationshipEntity rel WHERE (rel.user_1=:id_1 AND rel.user_2=:id_2) OR (rel.user_1=:id_2 AND rel.user_2=:id_1)").setParameter("id_1", entity.getUser_1()).setParameter("id_2",entity.getUser_2()).getResultList();
         if (rs.size()>0) {
             rs.forEach((ele) -> {entityManager.remove(ele);});
         }

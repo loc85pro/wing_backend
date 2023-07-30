@@ -1,10 +1,13 @@
 package com.win.server.service;
 
 import java.io.*;
+import java.util.Objects;
+import java.util.UUID;
 
 import com.win.server.exception.myexception.FileGeneralException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 @Service
 public class FileService {
     public void saveFile(MultipartFile file, String filename, String path) {
@@ -17,7 +20,6 @@ public class FileService {
         } catch (Exception ex) {
             throw new FileGeneralException();
         }
-
     }
 
     public byte[] loadAvatar(String userId) throws FileNotFoundException , IOException{
@@ -31,8 +33,8 @@ public class FileService {
         return in.readAllBytes();
     }
 
-    public byte[] loadPublicImage(String image_id) throws IOException {
-        String path = "src/main/resources/public/image/" + image_id + ".png";
+    public byte[] loadPublicImage(String image_name) throws IOException {
+        String path = "src/main/resources/public/image/" + image_name;
         FileInputStream in = new FileInputStream(path);
         return in.readAllBytes();
     }
@@ -41,5 +43,13 @@ public class FileService {
         String path = "src/main/resources/public/static/general/" + file_name;
         FileInputStream in = new FileInputStream(path);
         return in.readAllBytes();
+    }
+
+    public String savePublicImage(MultipartFile file) {
+        String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
+        String fileName = UUID.randomUUID().toString().replace("-","") + extension;
+        String publicImagePath = "src/main/resources/public/image/";
+        saveFile(file, fileName, publicImagePath);
+        return fileName;
     }
 }

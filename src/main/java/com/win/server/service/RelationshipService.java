@@ -56,4 +56,16 @@ public class RelationshipService {
         }
         return false;
     }
+
+    public boolean cancelRequest(String user_id) {
+        RelationshipEntity current_relationship = getRelationship(ContextUserManager.getUserId(), user_id);
+        if (current_relationship == null)
+            throw new NotFoundException();
+        String status = current_relationship.getStatus();
+        if (status.equals("PENDING")) {
+            relationshipRepository.remove(current_relationship);
+            return true;
+        }
+        return false;
+    }
 }

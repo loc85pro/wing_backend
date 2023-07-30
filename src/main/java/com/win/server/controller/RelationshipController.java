@@ -43,13 +43,22 @@ public class RelationshipController {
         return relationshipService.acceptFriendRequest(user_id);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/unfriend")
     public ResponseEntity<SimpleMessage> unfriend(@RequestParam String user_id) {
         boolean isDone = relationshipService.unfriend(user_id);
         SimpleMessage response = new SimpleMessage();
         response.setCode(isDone ? 200 : 400);
         response.setMessage(isDone ? "Done" : "Error");
         response.setDetail(isDone ? "" : "Unfriend only available for FRIEND and CLOSE_FRIEND relationships");
+        return ResponseEntity.status(isDone ? 200 : 400).body(response);
+    }
+    @DeleteMapping("/cancel_request")
+    public ResponseEntity<SimpleMessage> cancelRequest(@RequestParam String user_id) {
+        boolean isDone = relationshipService.cancelRequest(user_id);
+        SimpleMessage response = new SimpleMessage();
+        response.setCode(isDone ? 200 : 400);
+        response.setMessage(isDone ? "Done" : "Error");
+        response.setDetail(isDone ? "" : "Unfriend only available for PENDING relationships");
         return ResponseEntity.status(isDone ? 200 : 400).body(response);
     }
 }

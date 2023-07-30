@@ -8,11 +8,13 @@ import com.win.server.entity.CommentEntity;
 import com.win.server.entity.PostEntity;
 import com.win.server.entity.RelationshipEntity;
 import com.win.server.entity.UserEntity;
+import com.win.server.exception.myexception.ForbiddenException;
 import com.win.server.exception.myexception.NotFoundException;
 import com.win.server.repository.CommentRepository;
 import com.win.server.repository.PostRepository;
 import com.win.server.security.ContextUserManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,11 +40,12 @@ public class PostService {
         newPost.setCaption(caption);
         newPost.setPrivacy(privacy);
         //----- SAVE MEDIA FILE ------
-        String fileId =  UUID.randomUUID().toString().replace("-","");
-        String fileName = fileId + ".png";
-        fileService.saveFile(media, fileName, "src/main/resources/public/image");
-        String getImageURL = "/public/post?id=" + fileId;
-        newPost.setImage(getImageURL);
+//        String fileId =  UUID.randomUUID().toString().replace("-","");
+//        String fileName = fileId + ".png";
+//        fileService.saveFile(media, fileName, "src/main/resources/public/image");
+//        String getImageURL = "/public/post?id=" + fileId;
+        String file_name = fileService.savePublicImage(media);
+        newPost.setImage("/public/post?file_name="+file_name);
         postRepository.savePost(newPost);
         return convertToDTO(postRepository.findById(newPost.getId()));
     }
@@ -112,18 +115,6 @@ public class PostService {
                 }
         ).collect(Collectors.toList());
     }
-    //---------------------------COMMENT--------------------
-    public CommentEntity uploadComment(String post_id, String content) {
-        PostEntity post = postRepository.findById(post_id);
-        CommentEntity comment = new CommentEntity();
-        comment.setId(UUID.randomUUID().toString());
-        comment.setPost_id(post_id);
-        comment.setUser_id(ContextUserManager.getUserId());
-        comment.setContent(content);
-        comment.setCreate_at(new Timestamp(System.currentTimeMillis()));
-        return commentRepository.saveComment(comment);
-    }
-
     public List<CommentDTO> getCommentByPostId(String post_id) {
         List<CommentEntity> listComment = commentRepository.getAllCommentByPost(post_id);
         List<CommentDTO>  rs = new ArrayList<CommentDTO>();
@@ -156,5 +147,59 @@ public class PostService {
         });
         Collections.sort(listPost);
         return listPost;
+    }
+
+    public void deletePostById(String post_id) {
+        PostEntity post = postRepository.findById(post_id);
+        String current_user = ContextUserManager.getUserId();
+        if (post.getOwner_id().equals(current_user))
+            postRepository.remove(post);
+        else
+            throw new ForbiddenException();
+    }
+    public void editPostById(String post_id, String caption, MultipartFile media) {
+        PostEntity post = postRepository.findById(post_id);
+        String current_user = ContextUserManager.getUserId();
+        if (post.getOwner_id().equals(current_user)) {
+            if (caption!=null)
+                post.setCaption(caption);
+            if (media!=null)
+            {
+                String fileName = fileService.savePublicImage(media);
+                post.setImage("/public/post?file_name="+fileName);
+            }
+            post.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+            postRepository.update(post);
+        }
+    }
+    //---------------------------COMMENT--------------------
+    public CommentEntity uploadComment(String post_id, String content) {
+        PostEntity post = postRepository.findById(post_id);
+        CommentEntity comment = new CommentEntity();
+        comment.setId(UUID.randomUUID().toString());
+        comment.setPost_id(post_id);
+        comment.setUser_id(ContextUserManager.getUserId());
+        comment.setContent(content);
+        comment.setCreate_at(new Timestamp(System.currentTimeMillis()));
+        return commentRepository.saveComment(comment);
+    }
+
+    public void editComment(String comment_id, String content) {
+        String current_user = ContextUserManager.getUserId();
+        CommentEntity comment = commentRepository.getCommentById(comment_id);
+        if (!current_user.equals(comment.getUser_id()))
+            throw new ForbiddenException();
+        comment.setContent(content);
+        comment.setUpdate_at(new Timestamp(System.currentTimeMillis()));
+        commentRepository.update(comment);
+    }
+
+    public void deleteComment(String comment_id) {
+        String current_user = ContextUserManager.getUserId();
+        CommentEntity comment = commentRepository.getCommentById(comment_id);
+        PostDTO post = getPostById(comment.getPost_id());
+        if (!(current_user.equals(comment.getUser_id())||current_user.equals(post.getOwner_id())))
+            throw new ForbiddenException();
+        commentRepository.remove(comment);
     }
 }

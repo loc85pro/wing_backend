@@ -61,4 +61,10 @@ public class AuthExceptionHandler {
     public ErrorResponse handleNotFound() {
         return new ErrorResponse("Not found", 404);
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleForbidden() {
+        return new ErrorResponse("Forbidden", 403);
+    }
 }

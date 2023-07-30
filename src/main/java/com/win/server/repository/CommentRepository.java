@@ -26,4 +26,14 @@ public class CommentRepository {
     public List<CommentEntity> getAllCommentByPost(String id) {
         return entityManager.createQuery("FROM CommentEntity com WHERE  com.post_id=:id").setParameter("id",id).getResultList();
     }
+
+    @Transactional
+    public void remove(CommentEntity entity) {
+        entityManager.remove(entity);
+    }
+
+    @Transactional
+    public void update(CommentEntity entity) {
+        entityManager.persist(entity);
+    }
 }
