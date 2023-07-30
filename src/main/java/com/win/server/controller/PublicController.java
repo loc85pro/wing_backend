@@ -3,13 +3,15 @@ package com.win.server.controller;
 import com.win.server.DTO.UserDTO;
 import com.win.server.exception.myexception.FileGeneralException;
 import com.win.server.exception.myexception.UserNotFoundException;
-import com.win.server.security.ContextUserManager;
 import com.win.server.service.FileService;
 import com.win.server.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +31,17 @@ public class PublicController {
         return fileService.loadAvatar(user_id);
     }
 
-    @GetMapping(value = "/post", produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/post")
     @ResponseStatus(HttpStatus.OK)
-    public byte[] getPostMediaById(@RequestParam("file_name") String image_name) {
+    public ResponseEntity<byte[]> getPostMediaById(@RequestParam("file_name") String image_name, HttpServletResponse rs) {
         try {
-            return fileService.loadPublicImage(image_name);
+            String type = "image/png";
+            if (image_name.substring(image_name.lastIndexOf(".")).equals(".mp4"))
+                type="video/mp4";
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-type",type);
+
+            return ResponseEntity.status(200).headers(headers).body(fileService.loadPublicImage(image_name));
         }   catch (Exception ex) {
             throw new FileGeneralException();
         }
