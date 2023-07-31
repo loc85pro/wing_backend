@@ -27,8 +27,21 @@ public class RelationshipController {
 
     @GetMapping("/list_friend")
     @ResponseStatus(HttpStatus.OK)
-    public List<RelationshipElementDTO> getListFriend() {
-        return relationshipService.getListFriend();
+    public List<RelationshipElementDTO> getListFriend(@RequestParam(required = false) String user_id) {
+        if (user_id==null)
+            return relationshipService.getListFriend();
+        return relationshipService.getListFriendNotMine(user_id);
+    }
+
+    @GetMapping("/list_sent_request")
+    @ResponseStatus(HttpStatus.OK)
+    public List<RelationshipElementDTO> getListSentRequest() {
+        return relationshipService.getListSentRequest();
+    }
+    @GetMapping("/list_received_request")
+    @ResponseStatus(HttpStatus.OK)
+    public List<RelationshipElementDTO> getListReceivedRequest() {
+        return relationshipService.getListReceivedRequest();
     }
 
     @GetMapping

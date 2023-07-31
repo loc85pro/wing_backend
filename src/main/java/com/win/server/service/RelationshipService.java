@@ -3,6 +3,7 @@ package com.win.server.service;
 import com.win.server.DTO.UserDTO;
 import com.win.server.DTO.relationship.RelationshipElementDTO;
 import com.win.server.entity.RelationshipEntity;
+import com.win.server.exception.myexception.ForbiddenException;
 import com.win.server.exception.myexception.NotFoundException;
 import com.win.server.repository.RelationshipRepository;
 import com.win.server.security.ContextUserManager;
@@ -21,7 +22,26 @@ public class RelationshipService {
     private final UserService userService;
 
     public List<RelationshipElementDTO> getListFriend() {
-        return getListFriendship();
+        String user = ContextUserManager.getUserId();
+        return getListFriendship(user);
+    }
+
+    public List<RelationshipElementDTO> getListFriendNotMine(String user_id) {
+        RelationshipEntity relationship = relationshipRepository.getRelationship(ContextUserManager.getUserId(),user_id);
+        if (relationship==null)
+            throw new ForbiddenException();
+        if (relationship.getStatus().equals("FRIEND")|| relationship.getStatus().equals("CLOSE_FRIEND"))
+            return getListFriendship(user_id);
+        throw new ForbiddenException();
+    }
+    public List<RelationshipElementDTO> getListSentRequest() {
+        List<RelationshipEntity> list = getPendingList().stream().filter(rel -> rel.getUser_1().equals(ContextUserManager.getUserId())).toList();
+        return convertRelationshipToElementDTO(ContextUserManager.getUserId(),list);
+    }
+
+    public List<RelationshipElementDTO> getListReceivedRequest() {
+        List<RelationshipEntity> list = getPendingList().stream().filter(rel -> rel.getUser_2().equals(ContextUserManager.getUserId())).toList();
+        return convertRelationshipToElementDTO(ContextUserManager.getUserId(),list);
     }
 
     public RelationshipEntity setNewRelationship(String user_id, String status) {
@@ -80,10 +100,21 @@ public class RelationshipService {
         return relationshipRepository.getRelationship(user_id);
     }
 
-    private List<RelationshipElementDTO> getListFriendship() {
+    private List<RelationshipElementDTO> getListFriendship(String user_id) {
+        String current_user = ContextUserManager.getUserId();
+        List<RelationshipEntity> allRelationship = getRelationship(user_id);
+        List<RelationshipEntity> friendRelationships = allRelationship.stream().filter(rel -> rel.getStatus().equals("FRIEND") || rel.getStatus().equals("CLOSE_FRIEND")).toList();
+        return convertRelationshipToElementDTO(user_id, friendRelationships);
+    }
+
+    private List<RelationshipEntity> getPendingList() {
         String current_user = ContextUserManager.getUserId();
         List<RelationshipEntity> allRelationship = getRelationship(ContextUserManager.getUserId());
-        List<RelationshipEntity> friendRelationships = allRelationship.stream().filter(rel -> rel.getStatus().equals("FRIEND") || rel.getStatus().equals("CLOSE_FRIEND")).toList();
+        List<RelationshipEntity> pendingRelationship = allRelationship.stream().filter(rel -> rel.getStatus().equals("PENDING")).toList();
+        return pendingRelationship;
+    }
+
+    private List<RelationshipElementDTO> convertRelationshipToElementDTO(String current_user, List<RelationshipEntity> friendRelationships) {
         List<RelationshipElementDTO> result = new ArrayList<RelationshipElementDTO>();
         friendRelationships.forEach(rel -> {
             String partner_id = current_user.equals(rel.getUser_1()) ? rel.getUser_2() : rel.getUser_1();
