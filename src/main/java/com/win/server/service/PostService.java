@@ -208,4 +208,5 @@ public class PostService {
             throw new ForbiddenException();
         commentRepository.remove(comment);
     }
+
 }

@@ -54,6 +54,19 @@ public class PostController {
         else
             return postService.getPostByUsername(username);
     }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePost(@RequestParam String post_id) {
+        postService.deletePostById(post_id);
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    public PostDTO editPost(@RequestParam String post_id, String cation, MultipartFile file) {
+        postService.editPostById(post_id, cation, file);
+        return postService.getPostById(post_id);
+    }
     //-------------
     @GetMapping("/new_feed")
     @ResponseStatus(HttpStatus.OK)
