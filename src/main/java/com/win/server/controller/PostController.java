@@ -63,7 +63,7 @@ public class PostController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public PostDTO editPost(@RequestParam String post_id, String cation, MultipartFile file) {
+    public PostDTO editPost(@RequestParam String post_id, @RequestParam(required = false) String cation,@RequestParam(required = false) MultipartFile file) {
         postService.editPostById(post_id, cation, file);
         return postService.getPostById(post_id);
     }
