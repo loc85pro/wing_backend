@@ -57,8 +57,8 @@ public class FileService {
     }
 
     public String savePublicFile(MultipartFile file) {
-        String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
-        String fileName = UUID.randomUUID().toString().replace("-","") + extension;
+        String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".")+1);
+        String fileName = UUID.randomUUID().toString().replace("-","") + "." + extension;
         String publicImagePath = "src/main/resources/public/file/";
         saveFile(file, fileName, publicImagePath);
         return fileName;

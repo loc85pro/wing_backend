@@ -170,7 +170,7 @@ public class PostService {
             if (media!=null)
             {
                 String fileName = fileService.savePublicFile(media);
-                post.setImage("/public/post?file_name="+fileName);
+                post.setImage("/public/file?file_name="+fileName);
             }
             post.setUpdate_at(new Timestamp(System.currentTimeMillis()));
             postRepository.update(post);

@@ -1,6 +1,8 @@
 package com.win.server.controller;
 
+import com.win.server.DTO.UserDTO;
 import com.win.server.DTO.auth.SimpleMessage;
+import com.win.server.DTO.relationship.RelationshipElementDTO;
 import com.win.server.constant.RelationshipStatus;
 import com.win.server.entity.RelationshipEntity;
 import com.win.server.exception.myexception.NotFoundException;
@@ -13,12 +15,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.function.EntityResponse;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/relationship")
 @RequiredArgsConstructor
 @Tag( name = "Relationship")
 public class RelationshipController {
     private final RelationshipService relationshipService;
+
+    @GetMapping("/list_friend")
+    @ResponseStatus(HttpStatus.OK)
+    public List<RelationshipElementDTO> getListFriend() {
+        return relationshipService.getListFriend();
+    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
