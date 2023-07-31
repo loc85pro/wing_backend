@@ -69,8 +69,8 @@ public class PostController {
     //-------------
     @GetMapping("/new_feed")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostEntity> getNewFeed() {
-        return postService.getAllVisibleOfFriendPost();
+    public List<PostDTO> getNewFeed() {
+        return postService.getNewFeed();
     }
 
 }

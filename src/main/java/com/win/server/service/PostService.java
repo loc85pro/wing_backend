@@ -149,6 +149,10 @@ public class PostService {
         return listPost;
     }
 
+    public List<PostDTO> getNewFeed() {
+        return getAllVisibleOfFriendPost().stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
     public void deletePostById(String post_id) {
         PostEntity post = postRepository.findById(post_id);
         String current_user = ContextUserManager.getUserId();
