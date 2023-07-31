@@ -7,7 +7,6 @@ import com.win.server.constant.RelationshipStatus;
 import com.win.server.entity.CommentEntity;
 import com.win.server.entity.PostEntity;
 import com.win.server.entity.RelationshipEntity;
-import com.win.server.entity.UserEntity;
 import com.win.server.exception.myexception.ForbiddenException;
 import com.win.server.exception.myexception.NotFoundException;
 import com.win.server.repository.CommentRepository;
@@ -145,9 +144,7 @@ public class PostService {
         friendIdList.forEach(id-> {
             listPost.addAll(postRepository.findByOwner(id));
         });
-        List<PostEntity> resultList = listPost.stream().filter(post-> !post.getPrivacy().equals("PRIVATE")).collect(Collectors.toList());
-        Collections.sort(resultList);
-        return listPost;
+        return  listPost.stream().filter(post -> !post.getPrivacy().equals("PRIVATE")).sorted().toList();
     }
 
     public List<PostDTO> getNewFeed() {
