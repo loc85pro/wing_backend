@@ -134,7 +134,7 @@ public class PostService {
         return rs;
     }
 
-    public List<PostEntity> getAllVisibleOfFriendPost() {
+    public List<PostEntity>  getAllVisibleOfFriendPost() {
         String current_user = ContextUserManager.getUserId();
         List<RelationshipEntity> relationshipList = relationshipService.getRelationship(current_user);
         List<String> friendIdList = new ArrayList<String>();
@@ -145,7 +145,8 @@ public class PostService {
         friendIdList.forEach(id-> {
             listPost.addAll(postRepository.findByOwner(id));
         });
-        Collections.sort(listPost);
+        List<PostEntity> resultList = listPost.stream().filter(post-> !post.getPrivacy().equals("PRIVATE")).collect(Collectors.toList());
+        Collections.sort(resultList);
         return listPost;
     }
 
