@@ -1,6 +1,7 @@
 package com.win.server.controller;
 
 import com.win.server.DTO.UserDTO;
+import com.win.server.constant.FileSupporter;
 import com.win.server.exception.myexception.FileGeneralException;
 import com.win.server.exception.myexception.UserNotFoundException;
 import com.win.server.service.FileService;
@@ -16,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/public")
@@ -41,7 +44,7 @@ public class PublicController {
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-type",type);
 
-            return ResponseEntity.status(200).headers(headers).body(fileService.loadPublicImage(image_name));
+            return ResponseEntity.status(200).headers(headers).body(fileService.loadPublicFile(image_name));
         }   catch (Exception ex) {
             throw new FileGeneralException();
         }
@@ -66,5 +69,16 @@ public class PublicController {
             return userService.getUserById(id);
         else
             return userService.getUserByUsername(username);
+    }
+
+    @GetMapping("/file")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<byte[]> getPublicFile(@RequestParam String file_name) {
+        String extensionName = FileSupporter.getExtensionName(file_name);
+        String contentType = FileSupporter.getContentTypeByExtension(extensionName);
+        HttpHeaders headers = new HttpHeaders();
+        System.out.println("Content-type" + contentType);
+        headers.add("Content-type", contentType);
+        return ResponseEntity.status(200).headers(headers).body(fileService.loadPublicFile(file_name));
     }
 }

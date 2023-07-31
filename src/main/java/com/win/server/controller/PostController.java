@@ -44,18 +44,6 @@ public class PostController {
         return postService.getPostByUserId(current_user_id);
     }
 
-    @PostMapping("/comment")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public CommentEntity commentIntoPost(@RequestBody CommentUploadRequest request) {
-        return postService.uploadComment(request.getPost_id(), request.getContent());
-    }
-
-    @GetMapping("/comment")
-    @ResponseStatus(HttpStatus.OK)
-    public List<CommentDTO> getPostComment(@RequestParam String post_id) {
-        return postService.getCommentByPostId(post_id);
-    }
-
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
     public List<PostDTO> getPostByUser(@RequestParam(required = false) String user_id, @RequestParam(required = false) String username) {
@@ -73,4 +61,28 @@ public class PostController {
         return postService.getNewFeed();
     }
 
+    //----------------------------
+    @PostMapping("/comment")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public CommentEntity commentIntoPost(@RequestBody CommentUploadRequest request) {
+        return postService.uploadComment(request.getPost_id(), request.getContent());
+    }
+
+    @GetMapping("/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public List<CommentDTO> getPostComment(@RequestParam String post_id) {
+        return postService.getCommentByPostId(post_id);
+    }
+
+    @DeleteMapping("/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteComment(@RequestParam String comment_id) {
+        postService.deleteComment(comment_id);
+    }
+
+    @PutMapping("/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentEntity editComment(@RequestParam String comment_id, String content) {
+        return postService.editComment(comment_id, content);
+    }
 }

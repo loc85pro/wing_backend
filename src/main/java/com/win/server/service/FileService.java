@@ -22,33 +22,44 @@ public class FileService {
         }
     }
 
-    public byte[] loadAvatar(String userId) throws FileNotFoundException , IOException{
-        String path = "src/main/resources/public/user/" + userId + "/avatar.png";
-        File defaultAvatar = new File(path); //Personal avatar
-        FileInputStream in;
-        if (!defaultAvatar.exists())   // User's avatar not exsit => default avatar
-            in = new FileInputStream("src/main/resources/public/static/general/default_avatar.png");
-        else
-            in = new FileInputStream(path);
-        return in.readAllBytes();
+    public byte[] loadAvatar(String userId) {
+        try {
+            String path = "src/main/resources/public/user/" + userId + "/avatar.png";
+            File defaultAvatar = new File(path); //Personal avatar
+            FileInputStream in;
+            if (!defaultAvatar.exists())   // User's avatar not exsit => default avatar
+                in = new FileInputStream("src/main/resources/public/static/general/default_avatar.png");
+            else
+                in = new FileInputStream(path);
+            return in.readAllBytes();
+        } catch (Exception ex) {
+            throw new FileGeneralException();
+        }
     }
 
-    public byte[] loadPublicImage(String image_name) throws IOException {
-        String path = "src/main/resources/public/image/" + image_name;
-        FileInputStream in = new FileInputStream(path);
-        return in.readAllBytes();
+    public byte[] loadPublicFile(String image_name)  {
+        try {
+            String path = "src/main/resources/public/file/" + image_name;
+            FileInputStream in = new FileInputStream(path);
+            return in.readAllBytes();
+        } catch (Exception ex)  {throw new FileGeneralException(); }
     }
 
     public byte[] loadPublicGeneralFile(String file_name) throws IOException{
-        String path = "src/main/resources/public/static/general/" + file_name;
-        FileInputStream in = new FileInputStream(path);
-        return in.readAllBytes();
+        try {
+            String path = "src/main/resources/public/static/general/" + file_name;
+            FileInputStream in = new FileInputStream(path);
+            return in.readAllBytes();
+        } catch (Exception ex) {
+            throw new FileGeneralException();
+        }
+
     }
 
-    public String savePublicImage(MultipartFile file) {
+    public String savePublicFile(MultipartFile file) {
         String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
         String fileName = UUID.randomUUID().toString().replace("-","") + extension;
-        String publicImagePath = "src/main/resources/public/image/";
+        String publicImagePath = "src/main/resources/public/file/";
         saveFile(file, fileName, publicImagePath);
         return fileName;
     }

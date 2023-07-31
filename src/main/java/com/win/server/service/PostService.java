@@ -44,7 +44,7 @@ public class PostService {
 //        String fileName = fileId + ".png";
 //        fileService.saveFile(media, fileName, "src/main/resources/public/image");
 //        String getImageURL = "/public/post?id=" + fileId;
-        String file_name = fileService.savePublicImage(media);
+        String file_name = fileService.savePublicFile(media);
         newPost.setImage("/public/post?file_name="+file_name);
         postRepository.savePost(newPost);
         return convertToDTO(postRepository.findById(newPost.getId()));
@@ -169,7 +169,7 @@ public class PostService {
                 post.setCaption(caption);
             if (media!=null)
             {
-                String fileName = fileService.savePublicImage(media);
+                String fileName = fileService.savePublicFile(media);
                 post.setImage("/public/post?file_name="+fileName);
             }
             post.setUpdate_at(new Timestamp(System.currentTimeMillis()));
@@ -188,7 +188,7 @@ public class PostService {
         return commentRepository.saveComment(comment);
     }
 
-    public void editComment(String comment_id, String content) {
+    public CommentEntity editComment(String comment_id, String content) {
         String current_user = ContextUserManager.getUserId();
         CommentEntity comment = commentRepository.getCommentById(comment_id);
         if (!current_user.equals(comment.getUser_id()))
@@ -196,6 +196,7 @@ public class PostService {
         comment.setContent(content);
         comment.setUpdate_at(new Timestamp(System.currentTimeMillis()));
         commentRepository.update(comment);
+        return comment;
     }
 
     public void deleteComment(String comment_id) {

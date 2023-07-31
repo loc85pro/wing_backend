@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header">
+        <p>Bài tập 1 - 20120320</p>
+        <div class="nav">
+            <span class="nav-menu" onclick="active_Nav(this)">Menu 1</span>
+            <span class="nav-menu" onclick="active_Nav(this)">Menu 2</span>
+            <span class="nav-menu" onclick="active_Nav(this)">Menu 3</span>
+            <span class="nav-menu" onclick="active_Nav(this)">Menu 4</span>
+            <span class="nav-menu" onclick="active_Nav(this)">Menu 5</span>
+        </div>
+    </div>
+    <hr size="1px" width="100%" color="#1869D8">
+    <div class="main-size">
+        <div class="main">
+            <h2>Đăng kí học phần</h2>
+            <hr size="1px" width="100%" color="grey">
+            <form>
+                <div class="form-input">
+                    <label for="code">Mã số: </label>
+                    <input type="text" name="code" id="fcode">
+                    <label for="name">Họ và tên: </label>
+                    <input type="text" name="name" id="fname">
+                    <label for="address">Địa chỉ: </label>
+                    <input type="text" name="address" id="faddress">
+                    <label for="phone">Điện thoại: </label>
+                    <input type="text" name="phone" id="fphone">
+                    <label for="sex">Giới tính: </label>
+                    <div>
+                        <input type="radio" name="sex" id="fsex" value="Nam">
+                        <span>Nam</span>
+                        <input type="radio" name="sex" id="fsex" value="Nữ">
+                        <span>Nữ</span>
+                    </div>
+                    <label for="birth">Ngày sinh: </label>
+                    <input type="date" name="bỉth" id="fbirth">
+                    <label for="mail">Email: </label>
+                    <input type="email" name="mail" id="fmail">
+                </div>
+                <button style="background-color: inherit;border: 0px" onclick="submit_Form()"></button>
+            </form>
+            <div class="pick-subject">
+                <div id="available-list" ondrop="drop(this)"
+                    ondragover="allowDrop(event)">
+                    <p class="subject-lable" id="1" draggable="true"
+                        ondrag="lable_Grapping('1')">Lập Trình Hướng Đối Tượng
+                    </p>
+                    <p class="subject-lable" id="2" draggable="true"
+                        ondrag="lable_Grapping('2')">Cấu Trúc Dữ Liệu</p>
+                    <p class="subject-lable" id="3" draggable="true"
+                        ondrag="lable_Grapping('3')">MN Công Nghệ Phần Mềm</p>
+                    <p class="subject-lable" id="4" draggable="true"
+                        ondrag="lable_Grapping('4')">Trí Tuệ Nhân Tạo</p>
+                    <p class="subject-lable" id="5" draggable="true"
+                        ondrag="lable_Grapping('5')">Phát Triển Ứng Dụng Web</p>
+                    <p class="subject-lable" id="6" draggable="true"
+                        ondrag="lable_Grapping('6')">Cơ Sở Dữ Liệu</p>
+                    <p class="subject-lable" id="7" draggable="true"
+                        ondrag="lable_Grapping('7')">Nhập Môn Lập Trình</p>
+                    <p class="subject-lable" id="8" draggable="true"
+                        ondrag="lable_Grapping('8')">Kỹ Thuật Lập Trình</p>
+                    <p class="subject-lable" id="9" draggable="true"
+                        ondrag="lable_Grapping('9')">Lập Trình Windows</p>
+                    <p class="subject-lable" id="10" draggable="true"
+                        ondrag="lable_Grapping('10')">Lập Trình Ứng Dụng Java
+                    </p>
+                    <p id="avail-clone"></p>
+                </div>
+                <div class="button-switch">
+                    <button id="right-shift"> > </button>
+                    <button id="all-right-shift"> >> </button>
+                    <button id="left-shift">
+                        < </button>
+                            <button id="all-left-shift">
+                                << </button>
+                </div>
+                <div id="registed-list" ondrop="drop(this)"
+                ondragover="allowDrop(event)"><p id="registed-clone"></p></div>
+            </div>
+            <div class="button-submmit-area">
+                <button onclick="submit_Form()">Đăng kí</button>
+                <button onclick="remove_All()">Xóa hết</button>
+            </div>
+            <hr size="1px" color="grey">
+            <div id="result">
+                <span class="name-column">Mã số</span>
+                <span class="name-column">Họ và tên</span>
+                <span class="name-column">Giới tính</span>
+                <span class="name-column">Ngày sinh</span>
+            </div>
+        </div>
+        <div class="vertical-line"></div>
+        <div class="side">
+            <div id="new1" ondragstart="dragging_News(this)" ondragover="allowDrop(event)" ondrop="drop_News(this)">
+                <p class="title-news">
+                    <span class="drop-button" id="drop1" onclick="dropdown_Click('content-1')">&#9660</span>
+                    <span class="drag-button" id="drap2" onmousedown="drag_News(this)" onmouseout="undrag_News(this)">&#x2195</span>
+                    <span>NEWS 01</span>
+                </p>
+                <p id="content-1" class="content-news">content content content content content content content content content content content content content content</p>
+            </div>
+            <div id="new2" ondragstart="dragging_News(this)" ondragover="allowDrop(event)" ondrop="drop_News(this)">
+                <p class="title-news">
+                    <span class="drop-button" id="drop2" onclick="dropdown_Click('content-2')">&#9660</span>
+                    <span class="drag-button" id="drap2" onmousedown="drag_News(this)" onmouseout="undrag_News(this)">&#x2195</span>
+                    <span>NEWS 02</span>
+                </p>
+                <p id="content-2" class="content-news">content content</p>
+            </div>
+            <div id="new3" ondragstart="dragging_News(this)" ondragover="allowDrop(event)" ondrop="drop_News(this)">
+                <p class="title-news">
+                    <span class="drop-button" id="drop3" onclick="dropdown_Click('content-3')">&#9660</span>
+                    <span class="drag-button" id="drap2" onmousedown="drag_News(this)" onmouseout="undrag_News(this)">&#x2195</span>
+                    <span>NEWS 03</span>
+                </p>
+                <p class="content-news" id="content-3">content content content content content content content content content content content content content content content content content content content content content content content content content content content content
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p>Copyright ©️ phanxuanloc</p>
+        <span class="footer-menu" onclick="active_Footer(this)">Menu 1</span>
+        <span>|</span>
+        <span class="footer-menu" onclick="active_Footer(this)">Menu 2</span>
+        <span>|</span>
+        <span class="footer-menu" onclick="active_Footer(this)">Menu 3</span>
+        <span>|</span>
+        <span class="footer-menu" onclick="active_Footer(this)">Menu 4</span>
+        <span>|</span>
+        <span class="footer-menu" onclick="active_Footer(this)">Menu 5</span>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
