@@ -45,7 +45,7 @@ public class PostService {
 //        fileService.saveFile(media, fileName, "src/main/resources/public/image");
 //        String getImageURL = "/public/post?id=" + fileId;
         String file_name = fileService.savePublicFile(media);
-        newPost.setImage("/public/post?file_name="+file_name);
+        newPost.setImage("/public/file?file_name="+file_name);
         postRepository.savePost(newPost);
         return convertToDTO(postRepository.findById(newPost.getId()));
     }
@@ -151,7 +151,10 @@ public class PostService {
     }
 
     public List<PostDTO> getNewFeed() {
-        return getAllVisibleOfFriendPost().stream().map(this::convertToDTO).collect(Collectors.toList());
+        List<PostDTO> friendPost = getAllVisibleOfFriendPost().stream().map(this::convertToDTO).collect(Collectors.toList());
+        List<PostDTO> mine = getPostByUserId(ContextUserManager.getUserId());
+        friendPost.addAll(mine);
+        return friendPost;
     }
 
     public void deletePostById(String post_id) {
