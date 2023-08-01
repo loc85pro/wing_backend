@@ -70,6 +70,8 @@ public class PostService {
     //----------------
     public PostDTO getPostById(String id) {
         PostEntity post = postRepository.findById(id);
+        if (post.getOwner_id().equals(ContextUserManager.getUserId()))
+            return convertToDTO(post);
         if (post.getPrivacy().equals("PUBLIC"))
             return convertToDTO(post);
         if (post.getPrivacy().equals("PRIVATE"))
