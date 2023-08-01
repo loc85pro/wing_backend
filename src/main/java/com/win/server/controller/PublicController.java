@@ -5,6 +5,7 @@ import com.win.server.constant.FileSupporter;
 import com.win.server.exception.myexception.FileGeneralException;
 import com.win.server.exception.myexception.UserNotFoundException;
 import com.win.server.service.FileService;
+import com.win.server.service.MailService;
 import com.win.server.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,6 +28,7 @@ import java.util.List;
 public class PublicController {
     private final FileService fileService;
     private final UserService userService;
+    private final MailService mailService;
 
     @GetMapping(value = "/avatar", produces = MediaType.IMAGE_PNG_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -80,5 +82,11 @@ public class PublicController {
         System.out.println("Content-type" + contentType);
         headers.add("Content-type", contentType);
         return ResponseEntity.status(200).headers(headers).body(fileService.loadPublicFile(file_name));
+    }
+
+    @GetMapping("/mail")
+    public String sendMail(@RequestParam String content) {
+        mailService.sendEmail(content);
+        return content + " sent";
     }
 }

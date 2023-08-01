@@ -64,7 +64,7 @@ public class PostController {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public PostDTO editPost(@RequestParam String post_id, @RequestParam(required = false) String caption,@RequestParam(required = false) MultipartFile file, @RequestParam(required = false) PostPrivacy privacy) {
-        postService.editPostById(post_id, caption, file, privacy.toString());
+        postService.editPostById(post_id, caption, file, privacy==null ? null : privacy.toString());
         return postService.getPostById(post_id);
     }
     //-------------

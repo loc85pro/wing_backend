@@ -8,16 +8,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 
-public class MailService {
     @Service
-    public class EmailService {
+    public class MailService {
 
         private String host = "smtp.gmail.com";
         private String port = "587";
         private String username = "phanxuanloc2612@gmail.com";
         private String password = "kpmultcipuitmbxg";
 
-        public void sendEmail() {
+        public void sendEmail(String content) {
             Properties props = new Properties();
             props.put("mail.smtp.host", host);
             props.put("mail.smtp.starttls.enable", "true");
@@ -33,15 +32,14 @@ public class MailService {
                     });
             Message message = new MimeMessage(session);
             try {
-                message.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress("phanxuanloc2612@gmail.com")});
+                message.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress("tanvhla257@gmail.com")});
 
                 message.setFrom(new InternetAddress(username));
                 message.setSubject("Testing email feature");
-                message.setText("Hello this is your daddy");
+                message.setText(content);
                 Transport.send(message);
             } catch (MessagingException e) {
                 e.printStackTrace();
             }
         }
     }
-}
