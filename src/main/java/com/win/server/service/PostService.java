@@ -162,7 +162,7 @@ public class PostService {
         else
             throw new ForbiddenException();
     }
-    public void editPostById(String post_id, String caption, MultipartFile media) {
+    public void editPostById(String post_id, String caption, MultipartFile media, String privacy) {
         PostEntity post = postRepository.findById(post_id);
         String current_user = ContextUserManager.getUserId();
         if (post.getOwner_id().equals(current_user)) {
@@ -173,6 +173,8 @@ public class PostService {
                 String fileName = fileService.savePublicFile(media);
                 post.setImage("/public/file?file_name="+fileName);
             }
+            if (privacy!=null)
+                post.setPrivacy(privacy);
             post.setUpdate_at(new Timestamp(System.currentTimeMillis()));
             postRepository.update(post);
         }

@@ -24,4 +24,7 @@ public class AuthController {
         String token = jwtProvider.generateToken(ContextUserManager.getUserId(), 120000L);
         return new SimpleMessage("accessToken", 200, token);
     }
+
+//    @GetMapping("/mail")
+//    @
 }

@@ -46,7 +46,7 @@ public class PostController {
 
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostDTO> getPostByUser(@RequestParam(required = false) String user_id, @RequestParam(required = false) String username) {
+    public List<PostDTO> getPostByUser(@RequestParam(required = false) String user_id, @RequestParam(name= "file",required = false) String username) {
         if (user_id==null && username==null)
             throw new UserNotFoundException();
         if (user_id!=null)
@@ -63,8 +63,8 @@ public class PostController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public PostDTO editPost(@RequestParam String post_id, @RequestParam(required = false) String cation,@RequestParam(required = false) MultipartFile file) {
-        postService.editPostById(post_id, cation, file);
+    public PostDTO editPost(@RequestParam String post_id, @RequestParam(required = false) String caption,@RequestParam(required = false) MultipartFile file, @RequestParam(required = false) PostPrivacy privacy) {
+        postService.editPostById(post_id, caption, file, privacy.toString());
         return postService.getPostById(post_id);
     }
     //-------------

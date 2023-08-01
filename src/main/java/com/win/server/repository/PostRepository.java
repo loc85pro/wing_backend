@@ -35,6 +35,6 @@ public class PostRepository {
 
     @Transactional
     public void update(PostEntity entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 }
