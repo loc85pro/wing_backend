@@ -69,6 +69,6 @@ public class UserRepository  {
 
     @Transactional
     public void update(UserEntity entity) {
-        entityManager.persist(entity);
+        entityManager.merge(entity);
     }
 }

@@ -86,7 +86,7 @@ public class PublicController {
 
     @GetMapping("/mail")
     public String sendMail(@RequestParam String content) {
-        mailService.sendEmail(content);
+        mailService.sendEmail("" ,content);
         return content + " sent";
     }
 }

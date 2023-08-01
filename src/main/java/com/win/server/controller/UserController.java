@@ -24,9 +24,34 @@ public class UserController {
     public UserDTO getOwnData() {
         return userService.getUserById(ContextUserManager.getUserId());
     }
+
+    @PutMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO editProfile(@RequestParam(required = false) String user_name, @RequestParam(required = false) String full_name, @RequestParam(required = false) String phone, @RequestParam(required = false) MultipartFile avatar) {
+        userService.editProfile(user_name,full_name,avatar,phone);
+        return userService.getUserById(ContextUserManager.getUserId());
+    }
+
     @PostMapping("/avatar")
     public SimpleMessage uploadAvatar(@RequestParam("file") MultipartFile file) {
         userService.uploadAvatar(file);
         return new SimpleMessage("Successfully",200,"Upload done!");
+    }
+
+    @PutMapping("/edit_email")
+    public UserDTO editEmail(@RequestParam String password, @RequestParam String email) {
+        return userService.editEmail(password, email);
+    }
+
+    @GetMapping("/edit_password")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendCodeToEmail(@RequestParam String password) {
+        userService.sendCodeToChangePassword(password);
+    }
+
+    @PutMapping("/edit_password")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDTO changePasswordByCode(@RequestParam String code) {
+        return userService.editPasswordByEmailCodeVerify(code);
     }
 }

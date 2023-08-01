@@ -16,7 +16,7 @@ import java.util.Properties;
         private String username = "phanxuanloc2612@gmail.com";
         private String password = "kpmultcipuitmbxg";
 
-        public void sendEmail(String content) {
+        public void sendEmail(String address,String content) {
             Properties props = new Properties();
             props.put("mail.smtp.host", host);
             props.put("mail.smtp.starttls.enable", "true");
@@ -32,7 +32,7 @@ import java.util.Properties;
                     });
             Message message = new MimeMessage(session);
             try {
-                message.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress("tanvhla257@gmail.com")});
+                message.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress(address)});
 
                 message.setFrom(new InternetAddress(username));
                 message.setSubject("Testing email feature");
