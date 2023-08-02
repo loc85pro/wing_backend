@@ -9,11 +9,13 @@ public class UserDTO {
     private String user_name;
     private String full_name;
     private String avatarURL;
+    private String phone;
 
     public UserDTO(UserEntity entity) {
         this.id=entity.getId();
         this.user_name=entity.getUser_name();
         this.full_name=entity.getFull_name();
+        this.phone =entity.getPhone();
         this.avatarURL = "/public/avatar?user_id=" + entity.getId();
     }
 }
