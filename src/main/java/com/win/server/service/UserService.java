@@ -47,6 +47,7 @@ public class UserService {
             user.setPhone(phone);
         if (avatar!=null)
             uploadAvatar(avatar);
+        userRepository.update(user);
     }
 
     public UserDTO editEmail(String password, String email) {
