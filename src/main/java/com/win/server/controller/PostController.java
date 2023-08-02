@@ -46,7 +46,7 @@ public class PostController {
 
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostDTO> getPostByUser(@RequestParam(required = false) String user_id, @RequestParam(name= "file",required = false) String username) {
+    public List<PostDTO> getPostByUser(@RequestParam(required = false) String user_id, @RequestParam(required = false) String user_name) {
         if (user_id==null && username==null)
             throw new UserNotFoundException();
         if (user_id!=null)
