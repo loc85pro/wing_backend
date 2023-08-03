@@ -63,7 +63,7 @@ public class UserService {
     }
     public void sendCodeToChangePassword(String newPassword) {
         Random num = new Random(System.currentTimeMillis());
-        String code = String.valueOf((100000+num.nextInt())%100000);
+        String code = String.valueOf((100000+num.nextInt(100000))%100000);
         UserEntity user = userRepository.findById(ContextUserManager.getUserId());
         mailService.sendEmail(user.getEmail(), code);
         ContextUserManager.edit_email_code.put(user.getId(), code);
