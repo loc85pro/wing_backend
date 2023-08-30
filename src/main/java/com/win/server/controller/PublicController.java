@@ -89,4 +89,8 @@ public class PublicController {
         mailService.sendEmail("" ,content);
         return content + " sent";
     }
+    @GetMapping("/test")
+    public String testEndPoint() {
+        return "Hello bro";
+    }
 }
