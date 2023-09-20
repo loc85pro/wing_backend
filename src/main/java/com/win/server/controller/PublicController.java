@@ -91,6 +91,6 @@ public class PublicController {
     }
     @GetMapping("/test")
     public String testEndPoint() {
-        return "Hello bro nhe hehe!!!";
+        return "Hello bro nhe hehe (14:30)!!!";
     }
 }
